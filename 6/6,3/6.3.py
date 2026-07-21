@@ -6,8 +6,17 @@ def print_tree(path: Path, prefix: str = "") -> None:
     # Отримання списку файлів та директорій у поточній директорії
     try:
         items = sorted(path.iterdir(), key=lambda p: (p.is_file(), p.name.lower()))
-    except Exception as e:
-        print(f"Error accessing {path}: {e}")
+    except PermissionError:
+        print(f"Error: permission denied for {path}.")
+        return
+    except FileNotFoundError:
+        print(f"Error: {path} no longer exists.")
+        return
+    except NotADirectoryError:
+        print(f"Error: {path} is not a directory.")
+        return
+    except OSError as error:
+        print(f"Error accessing {path}: {error}")
         return
 
     # Виведення файлів та директорій
@@ -41,9 +50,13 @@ def main() -> None:
     # Отримання шляху до директорії
     dir_path = Path(sys.argv[1])
 
-    # Перевірка, чи існує директорія
+    # Перевірка, чи існує шлях і чи вказує він на директорію
+    if not dir_path.exists():
+        print(Fore.RED + f"Error: {dir_path} does not exist.")
+        sys.exit(1)
+
     if not dir_path.is_dir():
-        print(Fore.RED + f"Error: {dir_path} is not a valid directory.")
+        print(Fore.RED + f"Error: {dir_path} is not a directory.")
         sys.exit(1)
 
     # Виведення дерева директорії

@@ -7,12 +7,12 @@ class CatInfo(TypedDict):
     name: str
     age: str
 
-def get_cat_info(path: str) -> list[CatInfo]:
+def get_cats_info(path: str) -> list[CatInfo]:
     cats: list[CatInfo] = []
 
     try:
         # Відкриваємо файл для читання
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             for line in file:
                 line = line.strip()
                 # Перевірка на пустий рядок
@@ -39,12 +39,12 @@ def get_cat_info(path: str) -> list[CatInfo]:
     # Обробка помилок при відкритті файлу
     except FileNotFoundError:
         raise FileNotFoundError(f"File not found: {path}")
-    except Exception as e:
-        raise Exception(f"An error occurred while reading the file: {e}")
+    except ValueError:
+        raise ValueError(f"Invalid data in file: {path}")
 
     return cats
 
 if __name__ == "__main__":
     data_file_str = str(path(__file__).parent / "6.2.data.txt")
-    cats_info = get_cat_info(data_file_str)
+    cats_info = get_cats_info(data_file_str)
     print(cats_info)

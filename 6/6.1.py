@@ -1,12 +1,12 @@
 from pathlib import Path as path
 
-def total_salary(path: str) -> tuple[int, int]:
+def total_salary(path: str) -> tuple[int, float]:
     total = 0
     count = 0
 
     try:
         # Відкриваємо файл для читання
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             # Читаємо кожен рядок у файлі
             for line in file:
                 # Видаляємо пробіли на початку та в кінці рядка
@@ -38,7 +38,7 @@ def total_salary(path: str) -> tuple[int, int]:
         raise ValueError(f"Invalid data in file: {path}")
 
     # Калькуляция середньої зарплати
-    average = total // count if count > 0 else 0
+    average = total / count if count > 0 else 0
     return total, average
 
 if __name__ == "__main__":
